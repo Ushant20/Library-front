@@ -61,10 +61,7 @@ function Fees() {
 
         try {
 
-            const paymentRes = await api.post("/payments/", {
-                student: student.id,
-                amount: student.fee_amount,
-            });
+           
 
             await api.patch(`/students/${student.id}/`, {
                 fee_status: "Paid",
@@ -154,45 +151,83 @@ Thank you for choosing Front Benchers Library.
 
     const renewStudent = async (student) => {
 
-    const confirmRenew = window.confirm(
-        `Renew ${student.name}'s membership for next month?`
-    );
+        const confirmRenew = window.confirm(
+            `Renew ${student.name}'s membership for next month?`
+        );
 
-    if (!confirmRenew) return;
+        if (!confirmRenew) return;
 
-    const dueDate = student.fee_due_date
-        ? new Date(student.fee_due_date)
-        : new Date();
+        const dueDate = student.fee_due_date
+            ? new Date(student.fee_due_date)
+            : new Date();
 
-    dueDate.setMonth(dueDate.getMonth() + 1);
+        dueDate.setMonth(dueDate.getMonth() + 1);
 
-    const newDueDate = dueDate.toISOString().split("T")[0];
+        const newDueDate = dueDate.toISOString().split("T")[0];
 
-    try {
+        try {
 
-        await api.post("/payments/", {
-            student: student.id,
-            amount: student.fee_amount,
-        });
+            const paymentRes = await api.post("/payments/", {
+                student: student.id,
+                amount: student.fee_amount,
+            });
 
-        await api.patch(`/students/${student.id}/`, {
-            fee_status: "Paid",
-            fee_due_date: newDueDate,
-            last_payment_date: new Date()
-                .toISOString()
-                .split("T")[0],
-        });
+            const today = new Date().toISOString().split("T")[0];
 
-        await fetchStudents();
-        await fetchPayments();
+            if (paymentRes.data?.receipt_url) {
 
-        alert(`Membership renewed till ${newDueDate} ✅`);
+                const receiptLink =
+                    `https://api.fb.comworld.in${paymentRes.data.receipt_url}`;
 
-    } catch (error) {
-        console.log(error.response?.data || error);
-        alert("Renew Failed ❌");
-    }
-};
+                const message = `🏛️ FRONT BENCHERS LIBRARY
+
+Dear ${student.name},
+
+Your membership has been renewed successfully.
+
+👤 Student Name:
+${student.name}
+
+💰 Amount Paid:
+₹${student.fee_amount}
+
+📅 Payment Date:
+${today}
+
+📆 Next Due Date:
+${newDueDate}
+
+📌 Status:
+Renewed
+
+📄 Payment Receipt:
+
+${receiptLink}`;
+
+                window.open(
+                    `https://wa.me/91${student.whatsapp}?text=${encodeURIComponent(message)}`,
+                    "_blank"
+                );
+            }
+
+            await api.patch(`/students/${student.id}/`, {
+                fee_status: "Paid",
+                fee_due_date: newDueDate,
+                last_payment_date: new Date()
+                    .toISOString()
+                    .split("T")[0],
+            });
+
+            await fetchStudents();
+            await fetchPayments();
+
+            alert(`Membership renewed till ${newDueDate} ✅`);
+
+        } catch (error) {
+            console.log(error.response?.data || error);
+            alert("Renew Failed ❌");
+        }
+    };
 
 
     return (
