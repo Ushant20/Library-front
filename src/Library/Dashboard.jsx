@@ -19,28 +19,14 @@ function Dashboard() {
   const nextWeekDate =
     nextWeek.toISOString().split("T")[0];
 
-  useEffect(() => {
+useEffect(() => {
+  fetchDashboard();
 
-    api.get("/dashboard/")
-      .then((res) => {
+  api.get("/students/")
+    .then((res) => setStudents(res.data))
+    .catch((err) => console.log(err));
 
-        console.log(
-          "DASHBOARD DATA =>",
-          res.data
-        );
-
-        setStats(res.data);
-
-      })
-      .catch((err) => console.log(err));
-
-    api.get("/students/")
-      .then((res) => setStudents(res.data))
-      .catch((err) => console.log(err));
-
-    fetchDashboard();
-
-  }, []);
+}, []);
 
   const deleteStudent = async (id) => {
 

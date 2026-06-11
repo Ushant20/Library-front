@@ -47,58 +47,58 @@ function Fees() {
     );
 
     const collectFee = async (student) => {
-    const confirmFee = window.confirm(
-        `Collect ₹${student.fee_amount} fee from ${student.name}?`
-    );
-
-    if (!confirmFee) return;
-
-    const today = new Date().toISOString().split("T")[0];
-
-    const nextMonth = new Date();
-    nextMonth.setMonth(nextMonth.getMonth() + 1);
-    const nextDueDate = nextMonth.toISOString().split("T")[0];
-
-    try {
-
-        const paymentRes = await api.post("/payments/", {
-            student: student.id,
-            amount: student.fee_amount,
-        });
-
-        await api.patch(`/students/${student.id}/`, {
-            fee_status: "Paid",
-            last_payment_date: today,
-            fee_due_date: nextDueDate,
-        });
-
-        setStudents((prevStudents) =>
-            prevStudents.map((item) =>
-                item.id === student.id
-                    ? {
-                        ...item,
-                        fee_status: "Paid",
-                        last_payment_date: today,
-                        fee_due_date: nextDueDate,
-                    }
-                    : item
-            )
+        const confirmFee = window.confirm(
+            `Collect ₹${student.fee_amount} fee from ${student.name}?`
         );
 
-        setPaymentStats((prev) => ({
-            total_collection:
-                Number(prev.total_collection || 0) +
-                Number(student.fee_amount || 0),
-        }));
+        if (!confirmFee) return;
 
-        // ===== WHATSAPP RECEIPT =====
+        const today = new Date().toISOString().split("T")[0];
 
-        if (paymentRes.data?.receipt_url) {
+        const nextMonth = new Date();
+        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        const nextDueDate = nextMonth.toISOString().split("T")[0];
 
-            const receiptLink =
-                `https://api.fb.comworld.in${paymentRes.data.receipt_url}`;
+        try {
 
-            const message = `🏛️ FRONT BENCHERS LIBRARY
+            const paymentRes = await api.post("/payments/", {
+                student: student.id,
+                amount: student.fee_amount,
+            });
+
+            await api.patch(`/students/${student.id}/`, {
+                fee_status: "Paid",
+                last_payment_date: today,
+                fee_due_date: nextDueDate,
+            });
+
+            setStudents((prevStudents) =>
+                prevStudents.map((item) =>
+                    item.id === student.id
+                        ? {
+                            ...item,
+                            fee_status: "Paid",
+                            last_payment_date: today,
+                            fee_due_date: nextDueDate,
+                        }
+                        : item
+                )
+            );
+
+            setPaymentStats((prev) => ({
+                total_collection:
+                    Number(prev.total_collection || 0) +
+                    Number(student.fee_amount || 0),
+            }));
+
+            // ===== WHATSAPP RECEIPT =====
+
+            if (paymentRes.data?.receipt_url) {
+
+                const receiptLink =
+                    `https://api.fb.comworld.in${paymentRes.data.receipt_url}`;
+
+                const message = `🏛️ FRONT BENCHERS LIBRARY
 
 Dear ${student.name},
 
@@ -135,24 +135,24 @@ Thank you for choosing Front Benchers Library.
 
 📚 Learn • Focus • Achieve`;
 
-            window.open(
-                `https://wa.me/91${student.whatsapp}?text=${encodeURIComponent(message)}`,
-                "_blank"
-            );
+                window.open(
+                    `https://wa.me/91${student.whatsapp}?text=${encodeURIComponent(message)}`,
+                    "_blank"
+                );
+            }
+
+            alert("Fee Collected Successfully");
+
+            fetchStudents();
+            fetchPayments();
+
+        } catch (error) {
+            console.log("Fee collection error:", error.response?.data || error);
+            alert("Fee Collection Failed");
         }
+    };
 
-        alert("Fee Collected Successfully");
-
-        fetchStudents();
-        fetchPayments();
-
-    } catch (error) {
-        console.log("Fee collection error:", error.response?.data || error);
-        alert("Fee Collection Failed");
-    }
-};
-
-const renewStudent = async (student) => {
+    const renewStudent = async (student) => {
 
     const confirmRenew = window.confirm(
         `Renew ${student.name}'s membership for next month?`
@@ -160,7 +160,10 @@ const renewStudent = async (student) => {
 
     if (!confirmRenew) return;
 
-    const dueDate = new Date(student.fee_due_date);
+    const dueDate = student.fee_due_date
+        ? new Date(student.fee_due_date)
+        : new Date();
+
     dueDate.setMonth(dueDate.getMonth() + 1);
 
     const newDueDate = dueDate.toISOString().split("T")[0];
@@ -172,8 +175,7 @@ const renewStudent = async (student) => {
             amount: student.fee_amount,
         });
 
-        await api.put(`/students/${student.id}/`, {
-            ...student,
+        await api.patch(`/students/${student.id}/`, {
             fee_status: "Paid",
             fee_due_date: newDueDate,
             last_payment_date: new Date()
@@ -187,13 +189,10 @@ const renewStudent = async (student) => {
         alert(`Membership renewed till ${newDueDate} ✅`);
 
     } catch (error) {
-
         console.log(error.response?.data || error);
-
         alert("Renew Failed ❌");
     }
 };
-
 
 
     return (
