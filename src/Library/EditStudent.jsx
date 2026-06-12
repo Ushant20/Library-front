@@ -42,25 +42,6 @@ function EditStudent() {
 
     e.preventDefault();
 
-    try {
-
-      await api.put(
-        `/students/${id}/`,
-        formData
-      );
-
-      alert("Student Updated Successfully ✅");
-
-      navigate("/dashboard");
-
-    } catch (error) {
-
-      console.log(error);
-
-      alert("Update Failed ❌");
-
-    }
-
     if (formData.aadhaar_card.length !== 12) {
 
       alert(
@@ -68,6 +49,36 @@ function EditStudent() {
       );
 
       return;
+    }
+
+    try {
+
+      await api.put(`/students/${id}/`, {
+        name: formData.name,
+        father_name: formData.father_name,
+        aadhaar_card: formData.aadhaar_card,
+        whatsapp: formData.whatsapp,
+        address: formData.address,
+        joining_date: formData.joining_date,
+        fee_amount: formData.fee_amount,
+        fee_status: formData.fee_status,
+        fee_due_date: formData.fee_due_date,
+      });
+      alert("Student Updated Successfully ✅");
+
+      navigate("/dashboard");
+
+    } catch (error) {
+
+      console.log("UPDATE ERROR =>", error);
+      console.log("DATA =>", error.response?.data);
+
+      alert(
+        JSON.stringify(
+          error.response?.data || "Update Failed ❌"
+        )
+      );
+
     }
 
   };
@@ -152,7 +163,7 @@ function EditStudent() {
             )}
           </div>
 
-            <input
+          <input
             type="date"
             name="joining_date"
             value={formData.joining_date || ""}
@@ -177,7 +188,7 @@ function EditStudent() {
             className="border p-3 rounded-xl"
           />
 
-        
+
 
 
           <select

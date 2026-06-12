@@ -39,7 +39,8 @@ useEffect(() => {
     try {
 
       await api.delete(
-        `/students/${id}/`
+        `/students/${id}/`,
+        {is_active: false}
       );
 
       setStudents(
@@ -401,7 +402,7 @@ focus:border-indigo-500
             rounded-lg
           "
                     >
-                      Delete
+                      Deactivate
                     </button>
 
                     <button

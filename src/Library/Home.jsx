@@ -361,7 +361,7 @@ Please connect with the student.`;
   }, [showOrder]);
 
 
-  const CAFE_UPI_ID = "9643394793@axl";
+  const CAFE_UPI_ID = "7042447738-2@ybl";
   const CAFE_NAME = "FB Cafe";
   const WHATSAPP_NUMBER = "919990226207";
 
