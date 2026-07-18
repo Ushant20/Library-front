@@ -1047,7 +1047,18 @@ const handleConfirmOrder = () => {
                             Pay Online
                           </button>
 
-                          <button
+          
+                        </div>
+
+                        {paymentMethod === "Online Payment" && onlinePaymentStarted && (
+                          <p className="mt-3 text-sm text-green-700">
+                            Payment app opened. Complete payment, then click Confirm Order.
+                          </p>
+                        )}
+
+ */}
+
+                 <button
                             onClick={() => {
                               setPaymentMethod("Pay At Counter");
                               setOnlinePaymentStarted(false);
@@ -1067,15 +1078,6 @@ const handleConfirmOrder = () => {
                           >
                             Pay At Counter
                           </button>
-                        </div>
-
-                        {paymentMethod === "Online Payment" && onlinePaymentStarted && (
-                          <p className="mt-3 text-sm text-green-700">
-                            Payment app opened. Complete payment, then click Confirm Order.
-                          </p>
-                        )}
-
- */}
                       </div>
 
 
