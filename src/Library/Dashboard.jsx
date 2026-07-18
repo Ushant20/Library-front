@@ -19,14 +19,14 @@ function Dashboard() {
   const nextWeekDate =
     nextWeek.toISOString().split("T")[0];
 
-useEffect(() => {
-  fetchDashboard();
+  useEffect(() => {
+    fetchDashboard();
 
-  api.get("/students/")
-    .then((res) => setStudents(res.data))
-    .catch((err) => console.log(err));
+    api.get("/students/")
+      .then((res) => setStudents(res.data))
+      .catch((err) => console.log(err));
 
-}, []);
+  }, []);
 
   const deleteStudent = async (id) => {
 
@@ -40,7 +40,7 @@ useEffect(() => {
 
       await api.delete(
         `/students/${id}/`,
-        {is_active: false}
+        { is_active: false }
       );
 
       setStudents(
@@ -223,6 +223,16 @@ text-slate-800
 
             <h2 className="text-4xl font-bold mt-3">
               ₹{stats.total_collection || 0}
+            </h2>
+          </div>
+
+          <div className="bg-gradient-to-r from-blue-500 to-cyan-600 rounded-3xl shadow-lg p-6 text-white hover:scale-105 transition-all">
+            <h3 className="text-sm">
+              Monthly Collection
+            </h3>
+
+            <h2 className="text-4xl font-bold mt-3">
+              ₹{stats.monthly_collection || 0}
             </h2>
           </div>
           <div className="

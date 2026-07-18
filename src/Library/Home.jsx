@@ -806,18 +806,13 @@ Thank you.
   "
                         >
 
-
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="
-      w-full
-      h-44
-      sm:h-44
-      md:h-52
-      object-cover
-    "
-                          />
+                          <div className="w-full h-44 sm:h-44 md:h-52 bg-white flex items-center justify-center p-3">
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              className="max-w-full max-h-full object-contain"
+                            />
+                          </div>
 
                           <div className="p-4">
 
