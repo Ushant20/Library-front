@@ -524,38 +524,32 @@ Thank you.
 
     window.open(whatsappURL, "_blank");
   };
+const handleConfirmOrder = () => {
+  if (cartItems.length === 0) {
+    alert("Please add at least one item");
+    return;
+  }
 
-  const handleConfirmOrder = () => {
-    if (cartItems.length === 0) {
-      alert("Please add at least one item");
+  if (!seatNumber) {
+    alert("Please enter seat number");
+    return;
+  }
+
+  if (paymentMethod === "Online Payment") {
+    if (!onlinePaymentStarted) {
+      alert("Please click Pay Online and complete payment first");
       return;
     }
 
-    if (!seatNumber) {
-      alert("Please enter seat number");
-      return;
-    }
+    sendWhatsappOrder(
+      "Online payment completed by customer. Please verify UPI payment.",
+      currentOrderId
+    );
+    return;
+  }
 
-    if (!paymentMethod) {
-      alert("Please select payment method");
-      return;
-    }
-
-    if (paymentMethod === "Online Payment") {
-      if (!onlinePaymentStarted) {
-        alert("Please click Pay Online and complete payment first");
-        return;
-      }
-
-      sendWhatsappOrder(
-        "Online payment completed by customer. Please verify UPI payment.",
-        currentOrderId
-      );
-      return;
-    }
-
-    sendWhatsappOrder("Pay at counter", createOrderId());
-  };
+  sendWhatsappOrder("Pay at counter", createOrderId());
+};
 
 
   const totalAmt = getCartTotal();
