@@ -509,20 +509,10 @@ Hi FB Cafe,
 
 New cafe order received.
 
-Order ID: ${orderId}
-Seat Number: ${seatNumber}
+🧾 *Order Number: ${orderId}*
+💺 *Seat Number: ${seatNumber}*
 
-Order:
-${orderItems}
-
-Total Amount:
-Rs.${totalAmount}
-
-Payment Method:
-${paymentMethod}
-
-Payment Status:
-${paymentStatus}
+💰 Total Amount: Rs.${totalAmt}
 
 Kindly deliver the order to my seat once it is ready.
 
