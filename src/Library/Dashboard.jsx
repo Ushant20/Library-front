@@ -168,7 +168,7 @@ text-slate-800
 ">
           Dashboard Overview
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-7 gap-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-8 gap-6 mb-10">
 
           <div
             onClick={() => {
