@@ -1056,7 +1056,7 @@ Thank you.
                           </h2>
                         </div>
 
-                        <div className="space-y-3">
+                        {/* <div className="space-y-3">
                           <button
                             onClick={openOnlinePayment}
                             className={`
@@ -1102,7 +1102,7 @@ Thank you.
                           </p>
                         )}
 
-
+ */}
                       </div>
 
 
