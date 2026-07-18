@@ -535,18 +535,7 @@ const handleConfirmOrder = () => {
     return;
   }
 
-  if (paymentMethod === "Online Payment") {
-    if (!onlinePaymentStarted) {
-      alert("Please click Pay Online and complete payment first");
-      return;
-    }
-
-    sendWhatsappOrder(
-      "Online payment completed by customer. Please verify UPI payment.",
-      currentOrderId
-    );
-    return;
-  }
+ 
 
   sendWhatsappOrder("Pay at counter", createOrderId());
 };
