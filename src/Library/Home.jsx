@@ -504,12 +504,16 @@ Please connect with the student.`;
 
     const totalAmount = getCartTotal();
 
-    const message = `
+const orderNames = cartItems
+  .map((item) => `${item.name} x${item.quantity}`)
+  .join(", ");
+
+const message = `
 Hi FB Cafe,
 
 New cafe order received.
 
-🧾 *Order Number: ${orderId}*
+🍽️ *Order: ${orderNames}*
 💺 *Seat Number: ${seatNumber}*
 
 💰 Total Amount: Rs.${totalAmt}
